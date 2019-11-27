@@ -3,6 +3,7 @@ var router = express.Router();
 var Staff = require("../models/staff");
 var multer = require("multer");
 
+//multer setup
 var storage = multer.diskStorage({
   destination: function(req, file, cb) {
     cb(null, "./public/images");
@@ -13,14 +14,10 @@ var storage = multer.diskStorage({
 });
 
 var fileFilter = (req, file, cb) => {
-  if (
-    file.mimetype === "image/jpeg" ||
-    file.mimetype === "image/png" ||
-    file.mimetype === "image/jpg"
-  ) {
+  if (["image/jpeg", "image/png", "image/jpg"].includes(file.mimetype)) {
     cb(null, true);
   } else {
-    cb(new Error("Picture wasn't saved"), false);
+    cb(new Error("Wrong file format"), false);
   }
 };
 
@@ -32,7 +29,20 @@ var upload = multer({
   fileFilter
 }).single("masterPicture");
 
-/* Add staff. */
+// Get staff
+router.get("/", function(req, res, next) {
+  Staff.find().then(staff =>
+    res
+      .status(201)
+      .json(staff)
+      .catch(error => {
+        console.log(error);
+        res.status(500).json({ error });
+      })
+  );
+});
+
+// Add staff
 router.post("/add", function(req, res, next) {
   upload(req, res, function(err) {
     //TODO: handle errors
@@ -58,14 +68,14 @@ router.post("/add", function(req, res, next) {
           name,
           description,
           services,
-          pictureURL: req.file ? req.file.path : null
+          pictureURL: req.file
+            ? `${name}.${req.file.originalname.split(".")[1]}`
+            : null
         })
       )
       .catch(error => {
         console.error(error);
-        res.status(400).send({
-          error
-        });
+        res.status(500).json({ error });
       });
   });
 });

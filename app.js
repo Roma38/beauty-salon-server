@@ -4,17 +4,23 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var mongoose = require("mongoose");
+var cors = require("cors");
 require("dotenv").config();
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
+var staffRouter = require("./routes/staff");
 
 var app = express();
 
+app.use(cors());
+
+//connect to Mongo
 mongoose
   .connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useCreateIndex: true
   })
   .then(() => console.log("connected to MongoDB"))
   .catch(error => console.error(error));
@@ -31,6 +37,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
+app.use("/staff", staffRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -7,7 +7,9 @@ var staffSchema = mongoose.Schema({
     unique: true
   },
   description: String,
-  services: []/* {
+  services: [
+    String
+  ] /* {
     type: [mongoose.Schema.Types.ObjectId],
     ref: "Service"
   } */,

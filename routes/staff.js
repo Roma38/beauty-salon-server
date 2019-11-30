@@ -6,7 +6,7 @@ var multer = require("multer");
 //multer setup
 var storage = multer.diskStorage({
   destination: function(req, file, cb) {
-    cb(null, "./public/images");
+    cb(null, "./public/images/staff");
   },
   filename: function(req, file, cb) {
     cb(null, `${req.body.name}.${file.originalname.split(".")[1]}`);
@@ -35,7 +35,7 @@ router.get("/", function(req, res, next) {
     .then(staff => res.status(201).json(staff))
     .catch(error => {
       console.log(error);
-      res.status(500).json({ error });
+      res.status(500).json({ error });//TODO: status code
     });
 });
 
@@ -71,7 +71,7 @@ router.post("/", function(req, res, next) {
             .json({ error: "Master with such name already exists" });
         }
         console.error(error);
-        res.status(500).json(error);
+        res.status(500).json(error);//TODO: status code
       });
   });
 });
@@ -107,7 +107,7 @@ router.put("/", function(req, res, next) {
             .json({ error: "Master with such name already exists" });
         }
         console.error(error);
-        res.status(500).json(error);
+        res.status(500).json(error);//TODO: status code
       });
   });
 });

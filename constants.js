@@ -1,0 +1,1 @@
+module.exports = ["Hairdressing", "Nail care", "Makeup"]

@@ -28,7 +28,7 @@ var upload = multer({
     fileSize: 5e6
   },
   fileFilter
-}).single("masterPicture");
+}).single("servicePicture");
 
 // Get services
 router.get("/", function(req, res, next) {
@@ -52,10 +52,6 @@ router.post("/", function(req, res, next) {
     // Everything went fine.
 
     const { name, description, category, duration, price } = req.body;
-
-    console.log("**********************************************");
-    console.log(req.body);
-    console.log("**********************************************");
 
     const service = new Service({
       name,

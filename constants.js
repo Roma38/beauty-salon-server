@@ -1,1 +1,1 @@
-module.exports = ["Hairdressing", "Nail care", "Makeup"]
+module.exports = ["Hairdressing", "Nail care", "Makeup"] // TODO: избавиться от хардкода

@@ -15,7 +15,11 @@ var serviceSchema = mongoose.Schema({
     default: null
   },
   price: Number,
-  duration: [{ type: Number, min: 0, max: 30 }],
+  duration: {
+    type: Number,
+    min: 0,
+    max: 450
+  },
   updated: {
     type: Date,
     default: Date.now

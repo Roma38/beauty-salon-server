@@ -5,11 +5,11 @@ var multer = require("multer");
 
 //multer setup
 var storage = multer.diskStorage({
-  destination: function(req, file, cb) {
+  destination: function (req, file, cb) {
     cb(null, "./public/images/staff");
   },
-  filename: function(req, file, cb) {
-    cb(null, `${req.body.name}.${file.originalname.split(".")[1]}`);
+  filename: function (req, file, cb) {
+    cb(null, `${JSON.parse(req.body.master).name}.${file.originalname.split(".")[1]}`);
   }
 });
 
@@ -30,7 +30,7 @@ var upload = multer({
 }).single("masterPicture");
 
 // Get staff
-router.get("/", function(req, res, next) {
+router.get("/", function (req, res, next) {
   Staff.find()
     .then(staff => res.status(201).json(staff))
     .catch(error => {
@@ -40,8 +40,8 @@ router.get("/", function(req, res, next) {
 });
 
 // Add staff
-router.post("/", function(req, res, next) {
-  upload(req, res, function(err) {
+router.post("/", function (req, res, next) {
+  upload(req, res, function (err) {
     //TODO: handle errors
     if (err instanceof multer.MulterError) {
       // A Multer error occurred when uploading.
@@ -49,13 +49,12 @@ router.post("/", function(req, res, next) {
       // An unknown error occurred when uploading.
     }
     // Everything went fine.
-
-    const { name, description, services } = req.body;
+    const { name, description, services } = JSON.parse(req.body.master);
 
     const staff = new Staff({
       name,
       description,
-      services: JSON.parse(services),
+      services,
       pictureURL: req.file
         ? `${name}.${req.file.originalname.split(".")[1]}`
         : null
@@ -77,8 +76,8 @@ router.post("/", function(req, res, next) {
 });
 
 //Edit staff
-router.put("/", function(req, res, next) {
-  upload(req, res, function(err) {
+router.put("/", function (req, res, next) {
+  upload(req, res, function (err) {
     //TODO: handle errors
     if (err instanceof multer.MulterError) {
       // A Multer error occurred when uploading.
@@ -87,12 +86,12 @@ router.put("/", function(req, res, next) {
     }
     // Everything went fine.
 
-    const { _id, name, description, services, pictureURL } = req.body;
+    const { _id, name, description, services, pictureURL } = JSON.parse(req.body.master);
 
     const newStaff = {
       name,
       description,
-      services: JSON.parse(services),
+      services,
       pictureURL: req.file
         ? `${name}.${req.file.originalname.split(".")[1]}`
         : pictureURL
@@ -113,7 +112,7 @@ router.put("/", function(req, res, next) {
 });
 
 //Delete staff
-router.delete("/", multer().none(), function(req, res, next) {
+router.delete("/", multer().none(), function (req, res, next) {
   Staff.findByIdAndDelete(req.body._id)
     .then(() => res.status(200).json({ message: "Successfully deleted" }))
     .catch(error => {

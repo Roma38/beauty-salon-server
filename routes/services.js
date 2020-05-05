@@ -6,10 +6,10 @@ var categories = require("../constants");
 
 //multer setup
 var storage = multer.diskStorage({
-  destination: function(req, file, cb) {
+  destination: function (req, file, cb) {
     cb(null, "./public/images/services");
   },
-  filename: function(req, file, cb) {
+  filename: function (req, file, cb) {
     cb(null, `${JSON.parse(req.body.service).name}.${file.originalname.split(".")[1]}`);
   }
 });
@@ -31,7 +31,7 @@ var upload = multer({
 }).single("servicePicture");
 
 // Get services
-router.get("/", function(req, res, next) {
+router.get("/", function (req, res, next) {
   Service.find()
     .then(items => res.status(201).json({ items, categories }))
     .catch(error => {
@@ -43,8 +43,8 @@ router.get("/", function(req, res, next) {
 //************************************************************* */
 
 // Add service
-router.post("/", function(req, res, next) {
-  upload(req, res, function(err) {
+router.post("/", function (req, res, next) {
+  upload(req, res, function (err) {
     //TODO: handle errors
     if (err instanceof multer.MulterError) {
       // A Multer error occurred when uploading.
@@ -82,8 +82,8 @@ router.post("/", function(req, res, next) {
 });
 
 //Edit service
-router.put("/", function(req, res, next) {
-  upload(req, res, function(err) {
+router.put("/", function (req, res, next) {
+  upload(req, res, function (err) {
     //TODO: handle errors
     if (err instanceof multer.MulterError) {
       // A Multer error occurred when uploading.
@@ -96,8 +96,8 @@ router.put("/", function(req, res, next) {
     const newService = {
       name,
       description,
-      category, 
-      duration, 
+      category,
+      duration,
       price,
       pictureURL: req.file
         ? `${name}.${req.file.originalname.split(".")[1]}`
@@ -119,7 +119,7 @@ router.put("/", function(req, res, next) {
 });
 
 //Delete service
-router.delete("/", multer().none(), function(req, res, next) {
+router.delete("/", multer().none(), function (req, res, next) {
   Service.findByIdAndDelete(req.body._id)
     .then(() => res.status(200).json({ message: "Successfully deleted" }))
     .catch(error => {

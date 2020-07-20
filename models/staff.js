@@ -9,15 +9,12 @@ var staffSchema = mongoose.Schema({
   description: String,
   services: [
     String
-  ] /* {
-    type: [mongoose.Schema.Types.ObjectId],
-    ref: "Service"
-  } */,
+  ],
   pictureURL: String,
   joinDate: {
     type: Date,
     default: Date.now
   }
-});
+}, { timestamps: true });
 
 module.exports = mongoose.model("Staff", staffSchema);
